@@ -16,6 +16,7 @@ class CategoryTile extends StatelessWidget {
         category.name,
         style: context.textStyles.textRegular
             .copyWith(color: ColorsApp.i.textSecondary, fontSize: 20),
+        maxLines: 1,
       ),
     );
   }

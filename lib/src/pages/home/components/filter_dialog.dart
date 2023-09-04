@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class FilterDialog extends StatefulWidget {
-  FilterDialog({super.key});
+  final List<bool> filters;
+  const FilterDialog(this.filters, {super.key});
 
   @override
   State<FilterDialog> createState() => _FilterDialogState();
@@ -18,6 +19,23 @@ class _FilterDialogState extends State<FilterDialog> {
   bool checkPrice = false;
 
   bool checkCategory = false;
+
+  @override
+  void initState() {
+    if (widget.filters[0]) {
+      checkTitle = true;
+    }
+    if (widget.filters[1]) {
+      checkDescription = true;
+    }
+    if (widget.filters[2]) {
+      checkPrice = true;
+    }
+    if (widget.filters[3]) {
+      checkCategory = true;
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

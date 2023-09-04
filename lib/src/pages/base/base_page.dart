@@ -1,58 +1,49 @@
-import 'package:corelab_app_challenge/src/pages/categories/categories_page.dart';
-import 'package:corelab_app_challenge/src/pages/home/home_page.dart';
 import 'package:flutter/material.dart';
 
 class BasePage extends StatefulWidget {
-  const BasePage({super.key});
+  final List<Widget> screens;
+  const BasePage({required this.screens, super.key});
 
   @override
   State<BasePage> createState() => _BasePageState();
 }
 
 class _BasePageState extends State<BasePage> {
-  final PageController _pageController = PageController(initialPage: 0);
-  int _pageIndex = 0;
+  int _currentIndex = 0;
+  final int _pageIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: PageView(
-        controller: _pageController,
-        physics: const NeverScrollableScrollPhysics(),
-        onPageChanged: (int index) {
-          setState(
-            () {
-              _pageIndex = index;
-            },
-          );
-        },
-        children: _buildPageViewChildren(),
+      body: IndexedStack(
+        index: _currentIndex,
+        children: widget.screens,
       ),
+      // body: PageView(
+      //   controller: _pageController,
+      //   physics: const NeverScrollableScrollPhysics(),
+      //   onPageChanged: (int index) {
+      //     setState(
+      //       () {
+      //         _pageIndex = index;
+      //       },
+      //     );
+      //   },
+      //   children: _buildPageViewChildren(),
+      // ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.white,
         type: BottomNavigationBarType.fixed,
         items: _buildItems(),
         onTap: (int index) {
-          _pageController.animateToPage(
-            index,
-            duration: const Duration(milliseconds: 200),
-            curve: Curves.easeInOut,
-          );
+          setState(() {
+            _currentIndex = index;
+          });
         },
         currentIndex: _pageIndex,
         fixedColor: Theme.of(context).primaryColor,
       ),
     );
-  }
-
-  List<Widget> _buildPageViewChildren() {
-    return [
-      const HomePage(),
-      const CategoriesPage(),
-      Container(color: Colors.blue),
-      Container(color: Colors.yellow),
-      Container(color: Colors.purple),
-    ];
   }
 
   List<BottomNavigationBarItem> _buildItems() {

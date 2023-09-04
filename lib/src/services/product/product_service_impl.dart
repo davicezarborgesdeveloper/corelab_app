@@ -14,22 +14,38 @@ class ProductServiceImpl implements ProductService {
     final result = json.decode(fileJson);
     result.forEach((d) => list.add(ProductModel.fromMap(d)));
     if (query != null && query.isNotEmpty) {
-      List<ProductModel> listQuery = list.where((e) {
-        if (type[0]) {
-          return removeDiacritics(e.name).toUpperCase().contains(query);
-        } else if (type[1]) {
-          return removeDiacritics(e.description).toUpperCase().contains(query);
-        } else if (type[2]) {
-          return removeDiacritics(e.description).toUpperCase().contains(query);
-        } else if (type[3]) {
-          return e.price.toString().contains(query);
+      var seen = <ProductModel>{};
+      for (var prod in list) {
+        if ((type[0] && type[1] && type[2] && type[3]) ||
+            (!type[0] && !type[1] && !type[2] && !type[3])) {
+          if (removeDiacritics(prod.name).toUpperCase().contains(query) ||
+              removeDiacritics(prod.description)
+                  .toUpperCase()
+                  .contains(query) ||
+              removeDiacritics(prod.category).toUpperCase().contains(query) ||
+              prod.price.toString().contains(query)) seen.add(prod);
         } else {
-          return removeDiacritics(e.name).toUpperCase().contains(query) ||
-              removeDiacritics(e.description).toUpperCase().contains(query) ||
-              removeDiacritics(e.category).toUpperCase().contains(query) ||
-              e.price.toString().contains(query);
+          if (type[0] &&
+              removeDiacritics(prod.name).toUpperCase().contains(query)) {
+            seen.add(prod);
+          }
+          if (type[1] &&
+              removeDiacritics(prod.description)
+                  .toUpperCase()
+                  .contains(query)) {
+            seen.add(prod);
+          }
+          if (type[2] &&
+              removeDiacritics(prod.category).toUpperCase().contains(query)) {
+            seen.add(prod);
+          }
+          if (type[3] && prod.price.toString().contains(query)) {
+            seen.add(prod);
+          }
         }
-      }).toList();
+      }
+
+      List<ProductModel> listQuery = seen.toList();
       return listQuery;
     } else {
       return list;

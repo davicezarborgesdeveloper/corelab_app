@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import './suggestion_service.dart';
 
-final _suggestionKey = 'suggestions';
+const _suggestionKey = 'suggestions';
 
 class SuggestionServiceImpl implements SuggestionService {
   @override

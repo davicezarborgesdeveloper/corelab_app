@@ -73,7 +73,7 @@ class _HomePageState extends State<HomePage> with Loader, Messages {
     var filters = await showDialog(
         context: context,
         builder: (_) {
-          return FilterDialog();
+          return FilterDialog(controller.filterType);
         });
     if (filters != null) {
       controller.filter(controller.filterQuery, filters);

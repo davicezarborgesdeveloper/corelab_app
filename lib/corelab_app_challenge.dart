@@ -1,9 +1,9 @@
-import 'package:corelab_app_challenge/src/core/ui/helpers/size_extensions.dart';
-import 'package:corelab_app_challenge/src/core/ui/styles/text_styles.dart';
 import 'package:corelab_app_challenge/src/core/ui/theme/theme_config.dart';
 import 'package:flutter/material.dart';
 
 import 'src/pages/base/base_page.dart';
+import 'src/pages/categories/categories_page.dart';
+import 'src/pages/home/home_page.dart';
 
 class CorelabAppChallenge extends StatelessWidget {
   const CorelabAppChallenge({super.key});
@@ -14,20 +14,15 @@ class CorelabAppChallenge extends StatelessWidget {
       title: 'Corelab',
       debugShowCheckedModeBanner: false,
       theme: ThemeConfig.theme,
-      home: Stack(children: [
-        const BasePage(),
-        Positioned(
-          right: 16,
-          bottom: 16,
-          child: Text(
-            '${context.screenWidth.toStringAsFixed(2)} x ${context.screenHeight.toStringAsFixed(2)}',
-            style: context.textStyles.textThin.copyWith(
-                decoration: TextDecoration.none,
-                color: Colors.black,
-                fontSize: 24),
-          ),
-        )
-      ]),
+      home: BasePage(
+        screens: [
+          const HomePage(),
+          const CategoriesPage(),
+          Container(),
+          Container(),
+          Container(),
+        ],
+      ),
     );
   }
 }

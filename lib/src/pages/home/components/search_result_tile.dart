@@ -33,7 +33,7 @@ class SearchResultTile extends StatelessWidget {
             width: 16,
           ),
           SizedBox(
-            width: context.percentWidth(.584),
+            width: context.percentWidth(.56),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
