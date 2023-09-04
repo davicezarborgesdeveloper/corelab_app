@@ -1,6 +1,7 @@
 import 'package:corelab_app_challenge/src/models/product_model.dart';
 import "package:collection/collection.dart";
 import 'package:corelab_app_challenge/src/services/suggestion/suggestion_service.dart';
+import 'package:diacritic/diacritic.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../services/product/product_service.dart';
@@ -32,14 +33,23 @@ abstract class HomeControllerBase with Store {
   @readonly
   var _groupProducts = <dynamic, List<dynamic>>{};
 
-  @readonly
-  String? _filterQuery;
+  @observable
+  String filterQuery = '';
+
+  @observable
+  List<bool> filterType = <bool>[false, false, false, false];
 
   @observable
   bool searchable = false;
 
   @action
-  bool setSearchable(bool value) => searchable = value;
+  void setSearchable(bool value) => searchable = value;
+
+  @action
+  void setFilterQuery(String value) => filterQuery = value;
+
+  @action
+  void setFilterType(List<bool> value) => filterType = value;
 
   @action
   Future<void> loadSuggestions() async {
@@ -54,8 +64,9 @@ abstract class HomeControllerBase with Store {
   }
 
   @action
-  Future<void> filter(String query) async {
-    _filterQuery = query;
+  Future<void> filter(String query, List<bool> type) async {
+    filterQuery = query;
+    filterType = type;
     await loadProducts();
   }
 
@@ -63,10 +74,12 @@ abstract class HomeControllerBase with Store {
   Future<void> loadProducts() async {
     try {
       _status = HomeStateStatus.loading;
-      _products = await ProductService().getProducts(_filterQuery);
-      if (_filterQuery == null || _filterQuery!.isEmpty) {
+      _products = await ProductService()
+          .getProducts(removeDiacritics(filterQuery.toUpperCase()), filterType);
+      if (filterQuery.isEmpty) {
         _groupProducts = groupBy(_products, (obj) => obj.post);
       }
+
       _status = HomeStateStatus.loaded;
     } catch (e) {
       _status = HomeStateStatus.error;

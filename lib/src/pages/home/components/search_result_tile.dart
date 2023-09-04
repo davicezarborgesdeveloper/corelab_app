@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:corelab_app_challenge/src/core/extensions/formatter_extensions.dart';
+import 'package:corelab_app_challenge/src/core/ui/helpers/size_extensions.dart';
 import 'package:corelab_app_challenge/src/core/ui/styles/colors_app.dart';
 import 'package:corelab_app_challenge/src/core/ui/styles/text_styles.dart';
 import 'package:corelab_app_challenge/src/models/product_model.dart';
@@ -7,12 +8,13 @@ import 'package:flutter/material.dart';
 
 class SearchResultTile extends StatelessWidget {
   final ProductModel product;
-  const SearchResultTile(this.product, {super.key});
+  final GestureTapCallback? onTap;
+  const SearchResultTile(this.product, {required this.onTap, super.key});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
         color: Colors.white,
@@ -31,7 +33,7 @@ class SearchResultTile extends StatelessWidget {
             width: 16,
           ),
           SizedBox(
-            width: 219,
+            width: context.percentWidth(.584),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

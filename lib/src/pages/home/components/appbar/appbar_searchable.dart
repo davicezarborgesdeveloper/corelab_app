@@ -7,8 +7,14 @@ class AppbarSearchable extends StatefulWidget {
   final HomeController controller;
   final double appSize;
   final GestureTapCallback? backButton;
-  const AppbarSearchable(this.controller, this.appSize,
-      {required this.backButton, super.key});
+  final ValueChanged<String>? searchSubmitted;
+  const AppbarSearchable(
+    this.controller,
+    this.appSize, {
+    required this.backButton,
+    this.searchSubmitted,
+    super.key,
+  });
 
   @override
   State<AppbarSearchable> createState() => _AppbarSearchableState();
@@ -38,12 +44,11 @@ class _AppbarSearchableState extends State<AppbarSearchable> {
                 child: TextFormField(
                   controller: searchEC,
                   autofocus: true,
-                  onChanged: (value) {
-                    widget.controller.filter(value);
-                  },
+                  // onChanged: widget.searchChange,
+                  onFieldSubmitted: widget.searchSubmitted,
+                  textInputAction: TextInputAction.search,
                   decoration: InputDecoration(
-                    suffixIcon: widget.controller.filterQuery != null &&
-                            widget.controller.filterQuery!.isNotEmpty
+                    suffixIcon: widget.controller.filterQuery.isNotEmpty
                         ? IconButton(
                             icon: const Icon(
                               Icons.close,
@@ -51,7 +56,8 @@ class _AppbarSearchableState extends State<AppbarSearchable> {
                             ),
                             onPressed: () {
                               searchEC.text = '';
-                              widget.controller.filter('');
+                              widget.controller
+                                  .filter('', [false, false, false, false]);
                             },
                           )
                         : null,
@@ -59,6 +65,18 @@ class _AppbarSearchableState extends State<AppbarSearchable> {
                 ),
               ),
             ),
+            // if (widget.controller.filterQuery.isNotEmpty)
+            //   Container(
+            //     color: Colors.amber,
+            //     child: TextButton(
+            //       onPressed: () {},
+            //       child: Text(
+            //         'Filtros',
+            //         style: context.textStyles.textBold
+            //             .copyWith(color: Colors.white, fontSize: 14),
+            //       ),
+            //     ),
+            //   ),
           ],
         );
       },

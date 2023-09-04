@@ -99,21 +99,35 @@ mixin _$HomeController on HomeControllerBase, Store {
     });
   }
 
-  late final _$_filterQueryAtom =
-      Atom(name: 'HomeControllerBase._filterQuery', context: context);
+  late final _$filterQueryAtom =
+      Atom(name: 'HomeControllerBase.filterQuery', context: context);
 
-  String? get filterQuery {
-    _$_filterQueryAtom.reportRead();
-    return super._filterQuery;
+  @override
+  String get filterQuery {
+    _$filterQueryAtom.reportRead();
+    return super.filterQuery;
   }
 
   @override
-  String? get _filterQuery => filterQuery;
+  set filterQuery(String value) {
+    _$filterQueryAtom.reportWrite(value, super.filterQuery, () {
+      super.filterQuery = value;
+    });
+  }
+
+  late final _$filterTypeAtom =
+      Atom(name: 'HomeControllerBase.filterType', context: context);
 
   @override
-  set _filterQuery(String? value) {
-    _$_filterQueryAtom.reportWrite(value, super._filterQuery, () {
-      super._filterQuery = value;
+  List<bool> get filterType {
+    _$filterTypeAtom.reportRead();
+    return super.filterType;
+  }
+
+  @override
+  set filterType(List<bool> value) {
+    _$filterTypeAtom.reportWrite(value, super.filterType, () {
+      super.filterType = value;
     });
   }
 
@@ -145,8 +159,8 @@ mixin _$HomeController on HomeControllerBase, Store {
       AsyncAction('HomeControllerBase.filter', context: context);
 
   @override
-  Future<void> filter(String query) {
-    return _$filterAsyncAction.run(() => super.filter(query));
+  Future<void> filter(String query, List<bool> type) {
+    return _$filterAsyncAction.run(() => super.filter(query, type));
   }
 
   late final _$loadProductsAsyncAction =
@@ -161,7 +175,7 @@ mixin _$HomeController on HomeControllerBase, Store {
       ActionController(name: 'HomeControllerBase', context: context);
 
   @override
-  bool setSearchable(bool value) {
+  void setSearchable(bool value) {
     final _$actionInfo = _$HomeControllerBaseActionController.startAction(
         name: 'HomeControllerBase.setSearchable');
     try {
@@ -172,8 +186,32 @@ mixin _$HomeController on HomeControllerBase, Store {
   }
 
   @override
+  void setFilterQuery(String value) {
+    final _$actionInfo = _$HomeControllerBaseActionController.startAction(
+        name: 'HomeControllerBase.setFilterQuery');
+    try {
+      return super.setFilterQuery(value);
+    } finally {
+      _$HomeControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setFilterType(List<bool> value) {
+    final _$actionInfo = _$HomeControllerBaseActionController.startAction(
+        name: 'HomeControllerBase.setFilterType');
+    try {
+      return super.setFilterType(value);
+    } finally {
+      _$HomeControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
+filterQuery: ${filterQuery},
+filterType: ${filterType},
 searchable: ${searchable}
     ''';
   }

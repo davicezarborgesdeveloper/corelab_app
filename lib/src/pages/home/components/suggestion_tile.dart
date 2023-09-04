@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 import '../../../core/ui/styles/colors_app.dart';
 
 class SuggestionTile extends StatelessWidget {
-  const SuggestionTile({super.key});
+  final String text;
+  final GestureTapCallback? onTap;
+  const SuggestionTile(this.text, {required this.onTap, super.key});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: onTap,
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 2),
         padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
@@ -22,7 +24,7 @@ class SuggestionTile extends StatelessWidget {
             ),
             const SizedBox(width: 14),
             Text(
-              'Ortodontia',
+              text,
               style: context.textStyles.textRegular
                   .copyWith(color: ColorsApp.i.textTernary, fontSize: 18),
             )

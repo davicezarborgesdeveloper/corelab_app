@@ -1,5 +1,8 @@
+import 'package:adaptive_action_sheet/adaptive_action_sheet.dart';
 import 'package:corelab_app_challenge/src/core/ui/styles/colors_app.dart';
 import 'package:corelab_app_challenge/src/core/ui/styles/text_styles.dart';
+import 'package:corelab_app_challenge/src/models/product_model.dart';
+import 'package:corelab_app_challenge/src/pages/home/components/product_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
@@ -23,6 +26,36 @@ class SearchDateTile extends StatelessWidget {
       initializeDateFormatting('pt-BR', '');
       return DateFormat('dd MMM', 'pt-BR').format(date);
     }
+  }
+
+  void _openModal(ProductModel product, BuildContext context) {
+    showAdaptiveActionSheet(
+      context: context,
+      title: Text(
+        product.name,
+        style: context.textStyles.textBold.copyWith(fontSize: 20),
+      ),
+      androidBorderRadius: 30,
+      actions: <BottomSheetAction>[
+        BottomSheetAction(
+          title: Text(
+            'DETALHE',
+            style: context.textStyles.textMedium
+                .copyWith(color: ColorsApp.i.primary),
+          ),
+          onPressed: (context) => Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => ProductDetail(product),
+            ),
+          ),
+        ),
+      ],
+      cancelAction: CancelAction(
+          title: Text(
+        'CANCELAR',
+        style: context.textStyles.textMedium.copyWith(color: Colors.red),
+      )), // onPressed parameter is optional by default will dismiss the ActionSheet
+    );
   }
 
   @override
@@ -49,7 +82,8 @@ class SearchDateTile extends StatelessWidget {
               shrinkWrap: true,
               physics: const ClampingScrollPhysics(),
               itemCount: items.length,
-              itemBuilder: (context, index) => SearchResultTile(items[index]),
+              itemBuilder: (context, index) => SearchResultTile(items[index],
+                  onTap: () => _openModal(items[index], context)),
               separatorBuilder: (_, index) =>
                   const Divider(color: Colors.grey, height: 1),
             ),
