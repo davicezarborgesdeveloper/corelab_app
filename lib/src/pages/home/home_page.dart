@@ -34,6 +34,7 @@ class _HomePageState extends State<HomePage> with Loader, Messages {
   final debouncer = Debouncer(milliseconds: 500);
   final focusSearch = FocusNode();
   bool enableSearch = false;
+  final searchEC = TextEditingController();
 
   @override
   void initState() {
@@ -66,6 +67,7 @@ class _HomePageState extends State<HomePage> with Loader, Messages {
   void dispose() {
     statusDisposer();
     focusSearch.dispose();
+    searchEC.dispose();
     super.dispose();
   }
 
@@ -131,11 +133,13 @@ class _HomePageState extends State<HomePage> with Loader, Messages {
                   backButton: () {
                     controller.setSearchable(false);
                     controller.setFilterQuery('');
+                    searchEC.text = '';
                   },
                   searchSubmitted: (value) async {
                     controller.filter(value, controller.filterType);
                     await SuggestionService().saveSuggestion(value);
                   },
+                  textController: searchEC,
                 )
               : AppbarNoSearch(
                   appBarSize,
@@ -182,18 +186,20 @@ class _HomePageState extends State<HomePage> with Loader, Messages {
                                       color: ColorsApp.i.textPrimary),
                                 ),
                               ),
-                              SuggestionTile(
-                                controller.suggestions[index],
-                                onTap: () => _findProducts(
-                                    controller.suggestions[index]),
-                              ),
+                              SuggestionTile(controller.suggestions[index],
+                                  onTap: () {
+                                _findProducts(controller.suggestions[index]);
+                                searchEC.text = controller.suggestions[index];
+                              }),
                             ],
                           );
                         }
                         return SuggestionTile(
                           controller.suggestions[index],
-                          onTap: () =>
-                              _findProducts(controller.suggestions[index]),
+                          onTap: () {
+                            _findProducts(controller.suggestions[index]);
+                            searchEC.text = controller.suggestions[index];
+                          },
                         );
                       },
                     )

@@ -8,11 +8,13 @@ class AppbarSearchable extends StatefulWidget {
   final double appSize;
   final GestureTapCallback? backButton;
   final ValueChanged<String>? searchSubmitted;
+  final TextEditingController textController;
   const AppbarSearchable(
     this.controller,
     this.appSize, {
     required this.backButton,
     this.searchSubmitted,
+    required this.textController,
     super.key,
   });
 
@@ -21,14 +23,6 @@ class AppbarSearchable extends StatefulWidget {
 }
 
 class _AppbarSearchableState extends State<AppbarSearchable> {
-  final searchEC = TextEditingController();
-
-  @override
-  void dispose() {
-    searchEC.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Observer(
@@ -42,7 +36,7 @@ class _AppbarSearchableState extends State<AppbarSearchable> {
               child: Container(
                 margin: const EdgeInsets.symmetric(vertical: 10),
                 child: TextFormField(
-                  controller: searchEC,
+                  controller: widget.textController,
                   autofocus: true,
                   // onChanged: widget.searchChange,
                   onFieldSubmitted: widget.searchSubmitted,
@@ -55,7 +49,7 @@ class _AppbarSearchableState extends State<AppbarSearchable> {
                               color: Colors.grey,
                             ),
                             onPressed: () {
-                              searchEC.text = '';
+                              widget.textController.text = '';
                               widget.controller
                                   .filter('', [false, false, false, false]);
                             },
@@ -65,18 +59,6 @@ class _AppbarSearchableState extends State<AppbarSearchable> {
                 ),
               ),
             ),
-            // if (widget.controller.filterQuery.isNotEmpty)
-            //   Container(
-            //     color: Colors.amber,
-            //     child: TextButton(
-            //       onPressed: () {},
-            //       child: Text(
-            //         'Filtros',
-            //         style: context.textStyles.textBold
-            //             .copyWith(color: Colors.white, fontSize: 14),
-            //       ),
-            //     ),
-            //   ),
           ],
         );
       },

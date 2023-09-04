@@ -30,7 +30,8 @@ class SuggestionServiceImpl implements SuggestionService {
         final SharedPreferences sp = await SharedPreferences.getInstance();
         List<String>? suggestions = await getSuggestions();
         suggestions!.add(suggestion);
-        sp.setStringList(_suggestionKey, suggestions.reversed.toList());
+        sp.setStringList(
+            _suggestionKey, (suggestions.toSet()).toList().reversed.toList());
       } catch (e, s) {
         log('Erro ao salvar sugestão', error: e, stackTrace: s);
         throw RepositoryException(message: 'Erro ao salvar sugestão');
